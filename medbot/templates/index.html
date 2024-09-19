@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mednote Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <h1>MedNote</h1>
+
+    <textarea id="user-input" placeholder="Speak or type your input..." rows="5" style="width:100%;"></textarea>
+    <div id="button-container">
+        <button id="listen-btn">Start Listening</button>
+        <button id="import-btn">Import Convo from File</button>
+        <button id="summarize-btn">Summarize</button>
+    </div>
+
+    <input type="file" id="file-input" style="display:none;" accept=".txt">
+
+    <div id="response-display">
+        <h3>Medical Note Summary</h3>
+        <button id="export-btn" style="display:none;">Download Text File</button>
+        <button id="edit-btn" style="display:none;">Edit</button>
+        <p id="model-response" contenteditable="false"></p>
+    </div>
+    
+
+    <div id="text-display">
+        <h3>Conversation History <span id="toggle-btn" class="toggle-btn">[Show]</span></h3>
+        <p id="conversation-history"></p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

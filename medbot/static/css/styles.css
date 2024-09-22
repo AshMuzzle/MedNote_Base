@@ -115,8 +115,8 @@ button:disabled {
 }
 
 #export-btn {
-  background-color: #3498db; /* Green color */
-  color: #fff; /* White text */
+  background-color: #3498db;
+  color: #fff;
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -127,18 +127,18 @@ button:disabled {
 }
 
 #export-btn:hover {
-  background-color: #2980b9; /* Darker green on hover */
+  background-color: #2980b9;
 }
 
 #model-response[contenteditable="true"] {
-  background-color: #f9f9f9; /* Light gray background when editing */
-  border: 1px solid #ccc; /* Border to indicate editable mode */
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
   padding: 10px;
 }
 
 #edit-btn {
-  background-color: #d6af11; /* Yellow color for Edit */
-  color: #fff; /* White text */
+  background-color: #d6af11;
+  color: #fff;
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -149,13 +149,29 @@ button:disabled {
 }
 
 #edit-btn:hover {
-  background-color: #bd990b; /* Darker yellow on hover */
+  background-color: #bd990b;
 }
 
 #edit-btn.save-mode {
-  background-color: #28a745; /* Green color for Save */
+  background-color: #28a745;
 }
 
 #edit-btn.save-mode:hover {
-  background-color: #218838; /* Darker green on hover */
+  background-color: #218838;
+}
+
+#csv-btn {
+  background-color: #7fb31f;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+#csv-btn:hover {
+  background-color: #668511;
 }

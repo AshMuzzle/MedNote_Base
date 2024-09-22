@@ -107,6 +107,50 @@ document.getElementById('export-btn').addEventListener('click', function() {
     URL.revokeObjectURL(url);
 });
 
+
+
+
+document.getElementById('csv-btn').addEventListener('click', function() {
+    const medicalNote = document.getElementById('model-response').innerText;
+
+    if (!medicalNote) {
+        alert("No medical note to export");
+        return;
+    }
+
+    // Split the medical note into lines (assuming each line is in a structured format)
+    const lines = medicalNote.split('\n');
+    const csvContent = [];
+    
+    // Define CSV header (adjust based on the structure of your note)
+    csvContent.push(['Section', 'Content']);
+
+    lines.forEach(line => {
+        // Split each line by ": " to separate the section header and its content
+        const splitLine = line.split(': ');
+
+        // Handle cases where the content is missing after the colon
+        if (splitLine.length === 2) {
+            csvContent.push([splitLine[0], splitLine[1]]);
+        } else if (splitLine.length === 1) {
+            csvContent.push([splitLine[0], '']); // Add empty content for missing values
+        }
+    });
+
+    // Convert the array to a CSV string
+    let csvString = "data:text/csv;charset=utf-8," + csvContent.map(e => e.join(",")).join("\n");
+
+    // Create a download link and click it programmatically
+    const encodedUri = encodeURI(csvString);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "medical_note.csv");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link); // Clean up
+});
+
+
 // Modify the transcribeText function to show the edit button after summarization
 function transcribeText() {
     const userInput = document.getElementById('user-input').value;
@@ -138,25 +182,27 @@ function transcribeText() {
     .then(response => response.json())
     .then(data => {
         clearInterval(loadingInterval);  // Stop loading animation
-
+    
         // Re-enable all buttons
         buttons.forEach(button => {
             button.disabled = false;
         });
-
+    
         summarizeBtn.innerText = 'Summarize';  // Reset button text
-
+    
         if (data.error) {
             alert(data.error);
         } else {
             document.getElementById('conversation-history').innerText = data.context;
             document.getElementById('model-response').innerText = data.response;
             
-            // Show the export and edit buttons
+            // Show the export, edit, and CSV buttons
             document.getElementById('export-btn').style.display = 'block';
             document.getElementById('edit-btn').style.display = 'block';
+            document.getElementById('csv-btn').style.display = 'block'; // Show CSV button
         }
     })
+    
     .catch(error => {
         console.error('Error:', error);
         clearInterval(loadingInterval);

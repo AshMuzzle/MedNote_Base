@@ -41,11 +41,9 @@ Name: [Patient's Full Name]
 Date of Birth: [DOB]
 Date of Visit: [Date]
 Provider: [Provider's Name]
-Chief Complaint:
+Chief Complaint: [Summarize the patient’s primary concern or reason for the visit.]
 
-[Summarize the patient’s primary concern or reason for the visit.]
-
-History of Present Illness (HPI):
+History of Present Illness (HPI): [Summarize the patient's medical history, including past medical conditions, allergies, medications, and relevant medical notes.]
 
 Onset: [When did the symptoms start?]
 Duration: [How long have the symptoms been present?]

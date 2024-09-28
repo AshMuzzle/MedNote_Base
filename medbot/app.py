@@ -33,7 +33,7 @@ Follow the template format precisely. If the conversation lacks details for cert
 
 Output Requirements:
 
-The final output should be the completed medical note with the information organized into the provided sections. Do not include any additional text, such as headers, explanations, or introductory remarks before the note. If there is no conversation transcribed, simply state, "No conversation". The output should strictly be the note itself, formatted according to the template. Below is the template I need you to follow:
+The final output should be the completed medical note with the information organized into the provided sections. Do not include any additional text, such as headers, explanations, or introductory remarks before the note. If there is no conversation transcribed, simply state, "No conversation". The output should strictly be the note itself, formatted according to the template. Furthermore, generate 10 possible ICD-10 Codes based on the medical note provided. for the Below is the template I need you to follow:
 
 Patient Information:
 
@@ -68,7 +68,8 @@ Instructions: [Provide instructions for follow-up or next steps.]
 Signature:
 
 Provider’s Name: [Provider's Name]
-Date: [Date] {question}
+Date: [Date]
+ICD-10 Codes: {question}
 
 Answer:
 """

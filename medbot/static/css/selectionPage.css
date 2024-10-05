@@ -1,0 +1,77 @@
+*{padding: 0; margin: 0; box-sizing: border-box;}
+
+#container {
+    max-width: 960px;
+    min-width: 500px;
+    background-color: rgb(61, 18, 234)e;
+    margin: 5px auto;
+}
+
+
+/* DO NOT MAKE ANY CHANGES TO THE ABOVE CODE. ADD YOUR CODE BELOW THIS COMMENT LINE */
+header {      
+    display: block;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    padding-bottom: 0%;
+    bottom: 0;       
+    background-color: #5c6aee;
+}
+header img {
+    bottom: -10px;
+    position: relative;
+}
+
+main { 
+    display: flex;
+    width: 80%;
+    position: relative;
+
+}
+aside {
+    clear: both;
+    width: 20%;
+    float: left;
+    position: relative;
+    
+}
+article {
+    padding: 1%;
+    display: inline-block;
+    position: relative;   
+    width: 50%;
+    overflow: auto;
+   
+}
+nav {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;   
+    
+}
+ul{
+    display:flex;
+    text-align: center;
+    list-style: none;
+}
+li{
+    padding: 5px;
+}
+footer {
+    position: relative;
+    text-align: center;
+    background-color: #5c6aee;
+    clear:both;
+}
+img {
+    width:100%;
+    border: 1px solid black;
+    max-height: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+  }

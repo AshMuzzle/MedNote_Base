@@ -81,6 +81,10 @@ chain = prompt | model
 def index():
     return render_template('index.html')
 
+@app.route('/selection-page')
+def selection_page():
+    return render_template('selectionPage.html')
+
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
     user_input = request.form.get('user_input')

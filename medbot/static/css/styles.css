@@ -175,3 +175,17 @@ button:disabled {
 #csv-btn:hover {
   background-color: #668511;
 }
+
+#next-page-btn {
+  background-color: #28a745; /* Green background */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#next-page-btn:hover {
+  background-color: #218838; /* Darker green on hover */
+}

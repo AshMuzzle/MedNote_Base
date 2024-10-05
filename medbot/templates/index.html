@@ -24,11 +24,12 @@
         <button id="export-btn" style="display:none;">Download Text File</button>
         <button id="csv-btn" style="display:none;">Export as CSV</button>
         <button id="edit-btn" style="display:none;">Edit</button>
+        <button id="next-page-btn" data-url="{{ url_for('selection_page') }}" style="display:none;">Next Page</button>
+
+
         <p id="model-response" contenteditable="false"></p>
     </div>
     
-    
-
     <div id="text-display">
         <h3>Conversation History <span id="toggle-btn" class="toggle-btn">[Show]</span></h3>
         <p id="conversation-history"></p>

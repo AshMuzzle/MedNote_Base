@@ -41,6 +41,8 @@ Run app.py and navigate to http://127.0.0.1:5000/
 
     ```bash
     pip install Flask langchain-ollama langchain-core SpeechRecognition
+    ollama run llama3.1
+    ctrl+d
     ```
 
 4. **Run the Flask application:**

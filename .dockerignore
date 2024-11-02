@@ -12,14 +12,18 @@ Thumbs.db
 
 # Configuration.
 app/source/logs/
-!.gitkeep
 *.log
 *.swp
 .hintrc
 
 # Project.
+Dockerfile
+.gitignore
+.git/
 .vscode/
 .idea/
+readme.md
+README.md
 
 # Personal.
 @eaDir

@@ -1,0 +1,26 @@
+# Line.
+* text=auto
+
+# Text.
+*.py text
+*.js text
+*.css text
+*.html text
+*.md text
+*.json text
+
+# Binaries.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.mp4 binary
+
+# Databases.
+*.sqlite3 binary
+*.db binary
+*.tar binary
+*.gz binary

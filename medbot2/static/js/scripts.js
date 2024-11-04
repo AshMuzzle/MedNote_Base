@@ -182,6 +182,8 @@ function transcribeText() {
         } else {
             document.getElementById('conversation-history').innerText = data.context;
             document.getElementById('model-response').innerText = data.response;
+            
+            sessionStorage.setItem('medicalNote', data.response);
 
             document.getElementById('export-btn').style.display = 'block';
             document.getElementById('edit-btn').style.display = 'block';

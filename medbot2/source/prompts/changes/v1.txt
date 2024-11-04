@@ -30,7 +30,7 @@ Output Requirements:
 The final output should consist of:
 1. The completed medical note with the information organized into the provided sections.
 2. A list of extracted key words or phrases, formatted as a comma-separated list, for the purpose of further selection by the user.
-3. Generate 10 possible ICD-10 Codes based on the medical note provided.
+3. Generate 5 possible ICD-10 Codes based on the medical note provided.
 
 Medical Note Template:
 
@@ -68,6 +68,10 @@ Signature:
 
 Provider’s Name: [Provider's Name]
 Date: [Date]
-ICD-10 Codes: {question}
-
+ICD-10 Codes:
+1. 
+2.
+3.
+4.
+5. {question}
 Extracted Keywords: {keywords}

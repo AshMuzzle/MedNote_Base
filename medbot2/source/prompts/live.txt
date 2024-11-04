@@ -16,7 +16,8 @@ Ensure that the information is placed correctly according to the template struct
 No Additional Information:
 
 Do not invent or add any information that is not explicitly mentioned in the transcript. Your task is strictly to organize and summarize the provided details.
-If any section of the template corresponds to information that was not mentioned in the transcript (e.g., patient name, chief complaint, specific symptoms), leave the placeholder as it is without filling in the section. For example, if the patient's name is not provided, keep "[Patient's Full Name]" in the note.
+If any section of the template corresponds to information that was not mentioned in the transcript (e.g., patient name, chief complaint, specific symptoms), state "[Not Provided]" as it is without filling in the section with extra content. For example, if the patient's name is not provided, state "[Not Provided]" in the note. If 
+patient education is not provided, state "[Not Provided]".
 
 Adherence to Template:
 
@@ -24,7 +25,7 @@ Follow the template format precisely. If the conversation lacks details for cert
 
 Output Requirements:
 
-The final output should be the completed medical note with the information organized into the provided sections. Do not include any additional text, such as headers, explanations, or introductory remarks before the note. If there is no conversation transcribed, simply state, "No conversation". The output should strictly be the note itself, formatted according to the template. Furthermore, generate 10 possible ICD-10 Codes based on the medical note provided. for the Below is the template I need you to follow:
+The final output should be the completed medical note with the information organized into the provided sections. Do not include any additional text, such as headers, explanations, or introductory remarks before the note. If there is no conversation transcribed, simply state, "No conversation". The output should strictly be the note itself, formatted according to the template. Furthermore, generate 5, and only 5 possible "ICD-10" Codes based on the medical note provided. for the Below is the template I need you to follow:
 
 Patient Information:
 
@@ -43,24 +44,29 @@ Severity: [Describe the severity of the symptoms.]
 Characteristics: [Describe the nature or type of symptoms.]
 Aggravating Factors: [What factors worsen the symptoms?]
 Relieving Factors: [What factors relieve the symptoms?]
-Physical Examination:
+Physical Examination: [Physical physician findings]
 
 Vital Signs: [Record any vital signs mentioned in the conversation.]
 General Appearance: [Describe the patient's overall appearance if relevant.]
 Relevant Findings: [Summarize key physical exam findings.]
-Assessment and Plan:
+Assessment and Plan: [Summarize the assessment and plan for the visit]
 
 Diagnosis: [Provide the primary diagnosis or differential diagnoses.]
 Plan: [Outline the treatment plan, including any further tests, referrals, or interventions.]
 Patient Education: [Summarize any patient education or advice given.]
-Follow-Up:
+Follow-Up: [Summarize the follow up plan]
 
-Instructions: [Provide instructions for follow-up or next steps.]
-Signature:
+Instructions: [Summarize any instructions that have been given to the patient]
+Signature: 
 
-Provider’s Name: [Provider's Name]
+Provider Name: [Provider Name]
 Date: [Date]
-ICD-10 Codes: {question}
+ICD-10 Codes:
+1. [Code 1]
+2. [Code 2]
+3. [Code 3]
+4. [Code 4]
+5. [Code 5] {question}
 
 Answer:
 """

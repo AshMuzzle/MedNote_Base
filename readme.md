@@ -25,8 +25,8 @@ MedNote leverages the power of LLMs to assist with the transcription and analysi
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/MedNote.git
-cd MedNote
+git clone -b docker https://github.com/AshMuzzle/MedNote_Base.git
+cd MedNote_Base
 ```
 
 ### **2. Move Docker Configuration**
@@ -65,17 +65,20 @@ Once the containers are up and running, access the application at [http://localh
 
 ```plaintext
 MedNote/
-├── app/                    # Flask application code
-│   ├── static/             # Static files (CSS, JS, images)
-│   ├── templates/          # HTML templates
-│   ├── source/             # Log files and prompt files
-│   ├── uploads/            # Directory for uploaded files
-│   ├── downloads/          # Directory for generated downloads
-│   ├── app.py              # Main application file
-├── Dockerfile              # Dockerfile for Ollama service
-├── docker-compose.yml      # Docker Compose configuration
-├── README.md               # Project documentation
-└── requirements.txt        # Python dependencies
+├── app/                    # Flask application root.
+│   ├── static/             # Static files (CSS, JS, IMG, HTML, PHP).
+│   ├── source/             # Log files and prompt files.
+│   ├── uploads/            # Directory for uploaded files.
+│   ├── downloads/          # Directory for generated downloads.
+│   ├── app.py              # Main application file.
+│   ├── Dockerfile          # Dockerfile for Flask service.
+├── Dockerfile              # Dockerfile for Ollama service.
+├── docker-compose.yml      # Docker Compose configuration file.
+├── entrypoint.sh           # Docker entrypoint script for Ollama.
+├── readme.md               # Project application documentation.
+├── security.md             # Project security documentation.
+├── robots.txt              # Project privatization.
+└── requirements.txt        # Project dependencies.
 ```
 
 ## **Configuration and Customization**
@@ -93,6 +96,8 @@ By default, the project uses the `llama3.1:8b-instruct-q6_K` model for transcrip
 
 ## **Troubleshooting**
 
+TBD.
+
 ### **Common Issues**
 
 - **Flask starts before Ollama models are ready**: Ensure that `entrypoint.sh` waits until the models are fully downloaded before starting the Ollama server.
@@ -100,7 +105,7 @@ By default, the project uses the `llama3.1:8b-instruct-q6_K` model for transcrip
 
 ### **Checking Logs**
 
-To view logs and debug, run:
+To view logs (/app/source/logs/) and debug, and/or run:
 
 ```bash
 docker-compose logs -f
@@ -110,7 +115,7 @@ This will provide real-time output from both Flask and Ollama services.
 
 ## **Contributing**
 
-Contributions are welcome! Please fork the repository and submit a pull request if you have any improvements.
+Contributions are closed at this time! Please fork the repository for custom configurations, or submit an issue if you have any improvements.
 
 ## **License**
 

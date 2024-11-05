@@ -1,15 +1,12 @@
-FROM python:3.12-slim
+FROM nvidia/cuda:12.6.2-cudnn-runtime-ubuntu22.04
 
-WORKDIR /app
+WORKDIR /ollama
 
-RUN pip install --no-cache-dir flask \
-                                langchain-ollama \
-                                langchain-core \
-                                werkzeug \
-                                SpeechRecognition
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
-COPY . .
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-EXPOSE 5000
-
-CMD ["python", "app.py"]
+ENTRYPOINT ["/entrypoint.sh"]

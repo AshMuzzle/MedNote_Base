@@ -12,13 +12,8 @@ import logging
 
 # Set directory paths.
 PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'source', 'prompts', 'live.txt')
-FAVICON_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img', 'favicon')
-IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img')
 LOG_PATH = os.path.join(os.path.dirname(__file__), 'source', 'logs')
 HTML_PATH = os.path.join(os.path.dirname(__file__), 'static', 'html')
-PHP_PATH = os.path.join(os.path.dirname(__file__), 'static', 'php')
-CSS_PATH = os.path.join(os.path.dirname(__file__), 'static', 'css')
-JS_PATH = os.path.join(os.path.dirname(__file__), 'static', 'js')
 STATIC_PATH = os.path.join(os.path.dirname(__file__), 'static')
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__), 'uploads')
 DOWNLOAD_PATH = os.path.join(os.path.dirname(__file__), 'downloads')
@@ -27,7 +22,6 @@ DOWNLOAD_PATH = os.path.join(os.path.dirname(__file__), 'downloads')
 app = Flask(__name__, template_folder=HTML_PATH, static_folder=STATIC_PATH)
 app.config['UPLOAD_PATH'] = UPLOAD_PATH
 app.config['DOWNLOAD_PATH'] = DOWNLOAD_PATH
-app.config['FAVICON_PATH'] = FAVICON_PATH
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['ALLOWED_EXTENSIONS'] = {'txt'}
 

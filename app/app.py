@@ -1,27 +1,34 @@
 from flask import Flask, render_template, request, jsonify, send_file
 from langchain_ollama import OllamaLLM
-from langchain_core.prompts import ChatPromptTemplate
-from logging.handlers import RotatingFileHandler
+from langchain.prompts import ChatPromptTemplate
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import HTTPException
-import speech_recognition as sr
+from logging.handlers import RotatingFileHandler
 import os
 import csv
 import tempfile
 import logging
 
-# Set directory paths.
+# Statics.
 PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'source', 'prompts', 'live.txt')
+FAVICON_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img', 'favicon')
+IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img')
 LOG_PATH = os.path.join(os.path.dirname(__file__), 'source', 'logs')
 HTML_PATH = os.path.join(os.path.dirname(__file__), 'static', 'html')
+PHP_PATH = os.path.join(os.path.dirname(__file__), 'static', 'php')
+CSS_PATH = os.path.join(os.path.dirname(__file__), 'static', 'css')
+JS_PATH = os.path.join(os.path.dirname(__file__), 'static', 'js')
 STATIC_PATH = os.path.join(os.path.dirname(__file__), 'static')
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__), 'uploads')
 DOWNLOAD_PATH = os.path.join(os.path.dirname(__file__), 'downloads')
+OLLAMA_BASE_URL = os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')
+OLLAMA_BASE_MODEL = os.environ.get('OLLAMA_BASE_MODEL', 'llama3.1:8b-instruct-q6_K')
 
 # Initialize and configure Flask.
 app = Flask(__name__, template_folder=HTML_PATH, static_folder=STATIC_PATH)
 app.config['UPLOAD_PATH'] = UPLOAD_PATH
 app.config['DOWNLOAD_PATH'] = DOWNLOAD_PATH
+app.config['FAVICON_PATH'] = FAVICON_PATH
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['ALLOWED_EXTENSIONS'] = {'txt'}
 
@@ -71,12 +78,9 @@ def load_prompt():
     with open(PROMPT_PATH, 'r') as file:
         return file.read()
 
-# Load the prompt file.
-prompt = load_prompt()
-
 # Initialize LLM.
-model = OllamaLLM(model="llama3.1")
-prompt = ChatPromptTemplate.from_template(prompt)
+model = OllamaLLM(model=OLLAMA_BASE_MODEL, base_url=OLLAMA_BASE_URL)
+prompt = ChatPromptTemplate.from_template(load_prompt())
 chain = prompt | model
 
 # Upload handler.
@@ -185,4 +189,4 @@ def download_csv():
         return render_template('500.html'), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

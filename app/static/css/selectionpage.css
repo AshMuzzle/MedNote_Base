@@ -1,111 +1,43 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
+*{padding: 0; margin: 0; box-sizing: border-box;}
 
 #container {
-    
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Align items to the top */
+    max-width: 960px;
+    min-width: 500px;
+    background-color: rgb(61, 18, 234)e;
+    margin: 5px auto;
 }
+
 
 /* DO NOT MAKE ANY CHANGES TO THE ABOVE CODE. ADD YOUR CODE BELOW THIS COMMENT LINE */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+  }
 
-header {
-    display: block;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    padding-bottom: 0%;
-    bottom: 0;
-    background-color: #5c6aee;
-}
-
-header img {
-    bottom: -10px;
-    position: relative;
-}
-
-main {
-    justify-content: center;
-    display: flex;
-    width: 100%;
-    position: relative;
-}
-
-aside {
-    clear: both;
-    width: 20%;
-    float: left;
-    position: relative;
-}
-
-article {
-    padding: 1%;
-    display: inline-block;
-    position: relative;
-    width: 50%;
-    overflow: auto;
-}
-
-nav {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-}
-
-ul {
-    display: flex;
-    text-align: center;
-    list-style: none;
-}
-
-li {
-    padding: 5px;
-}
-
-footer {
-    position: relative;
-    text-align: center;
-    background-color: #5c6aee;
-    clear: both;
-}
-
-img {
-    width: 100%;
-    border: 1px solid black;
-    max-height: 100%;
-}
-
-h1 {
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  h1 {
     text-align: center;
     color: #2c3e50;
-}
+  }
+  
+  form {
+     font-size: clamp(16px, 4vw, 24px); 
+     display: flex; flex-direction: column; 
+     align-items: center; } 
 
-.checkbox-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 100%;
-}
+  input[type="text"], input[type="submit"] {
+       font-size: inherit; 
+       padding: 0.5em;
+       margin: 5px;
+       transition: transform 0.3s,
+       font-size 0.3s; 
+        }
 
-.selected-content-container {
-    border: 1px solid #ccc;
-    padding: 0;
-    width: 1500px;
-    height: 500px;
-    margin-top: 0;
-    overflow-y: auto;
-    display: flex;
-}
-
-.selected-content-container textarea {
-    width: 100%;
-    height: 100%;
-    border: none;
-    resize: none;
-    padding: 10px;
-    box-sizing: border-box;
-}

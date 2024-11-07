@@ -34,7 +34,7 @@ cd MedNote_Base
 For optimal configuration, move Docker’s `daemon.json` file to the project root:
 
 ```powershell
-Move-Item -Path $env:USERPROFILE\.docker\daemon.json -Destination .\daemon.json -Force
+Move-Item -Path .\daemon.json -Destination $env:USERPROFILE\.docker\daemon.json -Force
 ```
 
 ### **3. Start the Application with Docker Compose**

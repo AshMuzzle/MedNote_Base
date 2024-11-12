@@ -22,7 +22,7 @@ STATIC_PATH = os.path.join(os.path.dirname(__file__), 'static')
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__), 'uploads')
 DOWNLOAD_PATH = os.path.join(os.path.dirname(__file__), 'downloads')
 OLLAMA_BASE_URL = os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')
-OLLAMA_BASE_MODEL = os.environ.get('OLLAMA_BASE_MODEL', 'llama3.1:8b-instruct-q6_K')
+OLLAMA_BASE_MODEL = os.environ.get('OLLAMA_BASE_MODEL')
 
 # Initialize and configure Flask.
 app = Flask(__name__, template_folder=HTML_PATH, static_folder=STATIC_PATH)

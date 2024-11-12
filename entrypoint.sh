@@ -13,7 +13,7 @@ fi
 # Update environment model.
 echo "SELECTED_MODEL=$SELECTED_MODEL" > ../.env
 
-# Pull the selected model
+# Pull the selected model.
 ollama pull "$SELECTED_MODEL"
 
 # Start and keep alive Ollama.

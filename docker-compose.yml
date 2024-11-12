@@ -22,6 +22,8 @@ services:
       retries: 30
     volumes:
       - ollama_data:/root/.ollama
+    env_file:
+      - .env
 
   flask:
     build:
@@ -31,6 +33,7 @@ services:
       - "5000:5000"
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
+      - SELECTED_MODEL
     volumes:
       - ./app:/app
     working_dir: /app

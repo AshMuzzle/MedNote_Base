@@ -13,6 +13,13 @@
 
 /* DO NOT MAKE ANY CHANGES TO THE ABOVE CODE. ADD YOUR CODE BELOW THIS COMMENT LINE */
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+
 header {
     display: block;
     width: 100%;

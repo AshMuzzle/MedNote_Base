@@ -2,12 +2,8 @@
 * text=auto
 
 # Text.
-*.py text
-*.js text
-*.css text
-*.html text
-*.md text
-*.json text
+*.sh text eol=lf
+*.bat text eol=crlf
 
 # Binaries.
 *.jpg binary
@@ -18,6 +14,9 @@
 *.pdf binary
 *.zip binary
 *.mp4 binary
+*.exe binary
+*.dll binary
+*.bin binary
 
 # Databases.
 *.sqlite3 binary

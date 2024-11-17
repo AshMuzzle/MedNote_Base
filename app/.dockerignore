@@ -1,0 +1,31 @@
+# Python.
+*.py[cod]
+*.pyo
+__pycache__/
+.venv/
+venv/
+
+# Environment.
+.env
+.DS_Store
+Thumbs.db
+
+# Configuration.
+app/source/logs/
+*.log
+*.swp
+.hintrc
+
+# Project.
+Dockerfile
+.gitignore
+.git/
+.vscode/
+.idea/
+readme.md
+README.md
+
+# Personal.
+@eaDir
+@tmp
+~snapshot

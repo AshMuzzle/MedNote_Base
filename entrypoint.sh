@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+# Function to health check Ollama.
+wait_for_ollama() {
+    until curl -s http://localhost:11434/v1/models > /dev/null; do
+        echo "Waiting for Ollama server to start..."
+        sleep 2
+    done
+    echo "Ollama server is ready."
+}
+
 # Adapt to GPU presence.
 if command -v nvidia-smi &> /dev/null && nvidia-smi -L | grep -q "GPU"; then
     echo "GPU detected. Selecting larger model."
@@ -10,12 +19,19 @@ else
     SELECTED_MODEL="llama3.2:3b-instruct-fp16"
 fi
 
-# Update environment model.
+# Set LLM.
 echo "SELECTED_MODEL=$SELECTED_MODEL" > ../.env
 
-# Pull the selected model.
+# Start service.
+ollama serve &
+OLLAMA_PID=$!
+
+# Verify service.
+wait_for_ollama
+
+# Get LLM.
+echo "Pulling model: $SELECTED_MODEL"
 ollama pull "$SELECTED_MODEL"
 
-# Start and keep alive Ollama.
-ollama serve & sleep 5
-wait
+# Continue service.
+wait $OLLAMA_PID

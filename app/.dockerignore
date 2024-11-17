@@ -21,7 +21,6 @@ app/source/logs/
 .hintrc
 
 # Project.
-Dockerfile
 .gitignore
 .git/
 .vscode/

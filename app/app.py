@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_file
+from dotenv import load_dotenv
 from langchain_ollama import OllamaLLM
 from langchain.prompts import ChatPromptTemplate
 from werkzeug.utils import secure_filename
@@ -9,7 +10,8 @@ import csv
 import tempfile
 import logging
 
-# Statics.
+# Declare statics.
+load_dotenv(dotenv_path='/app/.env')
 PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'source', 'prompts', 'live.txt')
 FAVICON_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img', 'favicon')
 IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img')
@@ -22,7 +24,7 @@ STATIC_PATH = os.path.join(os.path.dirname(__file__), 'static')
 UPLOAD_PATH = os.path.join(os.path.dirname(__file__), 'uploads')
 DOWNLOAD_PATH = os.path.join(os.path.dirname(__file__), 'downloads')
 OLLAMA_BASE_URL = os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')
-OLLAMA_BASE_MODEL = os.environ.get('OLLAMA_BASE_MODEL')
+OLLAMA_BASE_MODEL = os.environ.get('SELECTED_MODEL')
 
 # Initialize and configure Flask.
 app = Flask(__name__, template_folder=HTML_PATH, static_folder=STATIC_PATH)

@@ -42,14 +42,42 @@ function Write-Log {
 # Restart Docker service.
 function Restart-Docker {
     try {
-        $dockerService = Get-Service -Name "com.docker.service" -ErrorAction SilentlyContinue
-        if ($dockerService -and $dockerService.Status -eq 'Running') {
-            Write-Log -message "Restarting Docker to apply changes."
-            Stop-Service -Name "com.docker.service" -Force
-            Start-Service -Name "com.docker.service"
-            Write-Log -message "Docker service resumed."
+        # TODO: Set dynamic installation path.
+        # Default Docker installation path.
+        $dockerDesktopPath = "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe"
+
+        # Check for Docker's status.
+        $dockerProcess = Get-Process -Name "Docker Desktop" -ErrorAction SilentlyContinue
+        if ($dockerProcess) {
+            Write-Log -message "Restarting Docker Desktop to apply changes."
+            Stop-Process -Id $dockerProcess.Id -Force
+            Start-Process -FilePath $dockerDesktopPath -NoNewWindow
+            Write-Log -message "Docker Desktop has been restarted."
         } else {
-            throw "Docker service isn't running."
+            Write-Log -message "Docker Desktop is not running. Starting Docker Desktop."
+            Start-Process -FilePath $dockerDesktopPath -NoNewWindow
+            Write-Log -message "Docker Desktop has been started."
+        }
+
+        # Wait for Docker's startup.
+        $maxAttempts = 15
+        $attempt = 0
+        while ($attempt -lt $maxAttempts) {
+            $attempt++
+            try {
+                docker info >$null 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log -message "Docker Desktop is now ready."
+                    break
+                }
+            } catch {
+                # Continue.
+            }
+            Start-Sleep -Seconds 2
+        }
+        if ($attempt -eq $maxAttempts) {
+            Write-Log -message "Docker Desktop didn't become ready in time." -type "ERROR"
+            exit 1
         }
     } catch {
         Write-Log -message $_.Exception.Message -type "ERROR"
@@ -57,12 +85,13 @@ function Restart-Docker {
     }
 }
 
+
 ##### End of Primary Functions. #####
 
 ##### Start of Secondary Functions. #####
 
 # Verify PowerShell execution policy.
-function Check-ExecutionPolicy {
+function Test-ExecutionPolicy {
     try {
         $currentPolicy = Get-ExecutionPolicy -Scope Process
         $acceptablePolicies = @('RemoteSigned', 'Unrestricted', 'Bypass')
@@ -85,7 +114,7 @@ function Check-ExecutionPolicy {
 }
 
 # Verify Administrator privileges.
-function Check-Administrator {
+function Test-Administrator {
     try {
         if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
             throw "This script must be run as an administrator."
@@ -99,7 +128,7 @@ function Check-Administrator {
 }
 
 # Verify Windows version.
-function Check-WindowsVersion {
+function Test-WindowsVersion {
     try {
         $buildNumber = [Environment]::OSVersion.Version.Build
         $minBuildNumber = 19041 # Windows 10 version 2004 or higher
@@ -115,7 +144,7 @@ function Check-WindowsVersion {
 }
 
 # Verify Docker installation.
-function Check-Docker {
+function Test-Docker {
     try {
         $dockerVersionOutput = docker --version 2>$null
         if (-not $dockerVersionOutput) {
@@ -136,55 +165,46 @@ function Check-Docker {
 }
 
 # Verify Docker Compose installation.
-function Check-DockerCompose {
+function Test-DockerCompose {
     try {
         $dockerComposeVersionOutput = docker-compose --version 2>$null
         if (-not $dockerComposeVersionOutput) {
             throw "Docker Compose is not installed or not in PATH."
         } else {
-            $dockerComposeVersion = $dockerComposeVersionOutput -replace 'docker-compose version ([^,]+),.*','$1'
-            Write-Log -message "Docker Compose version $dockerComposeVersion found."
+            # Extract the version number using regex
+            if ($dockerComposeVersionOutput -match 'version\s+v?([\d\.]+)') {
+                $versionNumber = $Matches[1]
+                Write-Log -message "Docker Compose version $versionNumber found." -includeStep $true
+            } else {
+                throw "Unable to parse Docker Compose version from output: $dockerComposeVersionOutput"
+            }
 
             $minDockerComposeVersion = [Version]"1.25.0"
-            if ([Version]$dockerComposeVersion -lt $minDockerComposeVersion) {
-                throw "Docker Compose version $dockerComposeVersion is below the required version $minDockerComposeVersion. Please update Docker Compose."
+            if ([Version]$versionNumber -lt $minDockerComposeVersion) {
+                throw "Docker Compose version $versionNumber is below the required version $minDockerComposeVersion. Please update Docker Compose."
             }
         }
     } catch {
-        Write-Log -message $_.Exception.Message -type "ERROR"
+        Write-Log -message $_.Exception.Message -type "ERROR" -includeStep $true
         exit 1
     }
 }
 
-# Ensure correct WSL 2 configuration.
-function Configure-WSL {
+# Ensure correct WSL configuration.
+function Set-WSL {
     try {
+        # Check for WSL.
         if (-not (Get-Command wsl.exe -ErrorAction SilentlyContinue)) {
-            $installWSL = Get-UserInput "WSL (Windows Subsystem for Linux) isn't installed. Do you want to install WSL? (y/n)"
-            if ($installWSL -eq "y") {
-                Write-Log -message "Please wait while WSL is installed."
-                wsl --install
-                Write-Log -message "WSL has been installed."
-                $reboot = Get-UserInput "A reboot may be required to complete the WSL installation. Do you want to reboot now? (y/n)"
-                if ($reboot -eq "y") {
-                    $resumeFile = "$env:USERPROFILE\resume_script.flag"
-                    New-Item -Path $resumeFile -ItemType File -Force
-                    Restart-Computer
-                    exit
-                } else {
-                    Write-Log -message "Please reboot your computer later to complete the WSL installation."
-                    exit
-                }
-            } else {
-                throw "WSL installation skipped. Note: Docker may default to WSL on Windows."
-            }
+            Write-Log -message "WSL is not installed. Installing WSL..."
+            wsl --install
+            Write-Log -message "WSL has been installed. A reboot may be required."
         } else {
             Write-Log -message "WSL is already installed."
             Write-Log -message "Updating WSL to the latest version..."
             wsl --update
         }
 
-        # Ensure default WSL 2.
+        # Check default WSL version.
         $wslStatus = wsl --status 2>$null
         if ($wslStatus) {
             $defaultVersionLine = $wslStatus | Select-String 'Default Version:'
@@ -208,39 +228,41 @@ function Configure-WSL {
             Write-Log -message "Unable to get WSL status."
         }
 
-        # Ensure default Ubuntu.
-        $distributions = wsl --list --quiet
-        if ($distributions.Count -eq 0 -or [string]::IsNullOrEmpty($distributions)) {
-            Write-Log -message "No WSL distributions are installed. Installing Ubuntu..."
-            wsl --install -d Ubuntu
-            Write-Log -message "Ubuntu has been installed."
+        # Check for Ubuntu.
+        $distributions = wsl --list --quiet | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
+        $ubuntuInstalled = $distributions -contains 'Ubuntu'
 
-            Write-Host "Please complete the initial Ubuntu setup in the new window."
-            Read-Host "Press Enter when you have completed the Ubuntu setup."
+        if (-not $ubuntuInstalled) {
+            Write-Log -message "Ubuntu is not installed."
+            $installUbuntu = Get-UserInput "Ubuntu is not installed. Do you want to install Ubuntu? (y/n)"
+            if ($installUbuntu -eq "y") {
+                Write-Host "Please complete the initial Ubuntu setup in the new shell, then type 'exit'."
+                Write-Log -message "Installing Ubuntu..."
+                wsl --install -d Ubuntu
+                Write-Log -message "Ubuntu has been installed."
+                Read-Host "Press Enter when you have completed the Ubuntu setup."
+            } else {
+                Write-Log -message "Ubuntu installation skipped. Exiting." -type "ERROR"
+                exit 1
+            }
         } else {
-            Write-Log -message "WSL distributions installed: $distributions"
-            $defaultDistributionLine = (wsl --status | Select-String 'Default Distribution:')
-            if ($defaultDistributionLine) {
-                $defaultDistribution = $defaultDistributionLine.ToString().Split(':')[1].Trim()
-            } else {
-                $defaultDistribution = ''
-            }
-
-            if (-not $defaultDistribution) {
-                $firstDistribution = $distributions[0]
-                wsl --set-default $firstDistribution
-                Write-Log -message "Default distribution set to $firstDistribution"
-                $defaultDistribution = $firstDistribution
-            } else {
-                Write-Log -message "Default distribution is '$defaultDistribution'."
-            }
-
-            # Ensure WSL initialization.
-            Write-Log -message "Starting the default distribution to ensure it's initialized."
-            Start-Process -FilePath "wsl.exe" -ArgumentList "~" -NoNewWindow -Wait
-            Write-Host "If any initial setup is required in the WSL distribution, please complete it now."
-            Read-Host "Press Enter when you have completed any setup in the WSL distribution."
+            Write-Log -message "Ubuntu is already installed."
         }
+
+        # Check default WSL distribution.
+        Write-Log -message "Setting 'Ubuntu' as the default distribution."
+        $setDefaultResult = wsl --set-default Ubuntu 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Log -message "Failed to set 'Ubuntu' as default distribution: $setDefaultResult" -type "ERROR"
+            throw "Failed to set 'Ubuntu' as default distribution."
+        } else {
+            Write-Log -message "'Ubuntu' has been set as the default distribution."
+        }
+
+        # Verify Ubuntu installation.
+        Write-Log -message "Starting 'Ubuntu' to ensure it's initialized."
+        Write-Log -message "If any initial setup is required in Ubuntu, please complete it now."
+        Start-Process -FilePath "wsl.exe" -ArgumentList "-d", "Ubuntu", "exit" -NoNewWindow -Wait
     } catch {
         Write-Log -message $_.Exception.Message -type "ERROR"
         exit 1
@@ -248,7 +270,7 @@ function Configure-WSL {
 }
 
 # Ensure correct Docker configuration.
-function Configure-Docker {
+function Set-Docker {
     try {
         $daemonPath = "$env:USERPROFILE\.docker\daemon.json"
 
@@ -275,7 +297,7 @@ function Configure-Docker {
 
 # Prompt user for Docker Compose.
 function Start-DockerCompose {
-    $startDockerCompose = Get-UserInput "Do you want to start the application now with 'docker-compose up --build'? Note: If your internet speed is slow, select 'n' and build independently. (y/n)"
+    $startDockerCompose = Get-UserInput "Do you want to start the application now with 'docker-compose up --build'? Note: If your internet speed is slow, select 'n' and build it independently before starting. (y/n)"
     if ($startDockerCompose -eq "y") {
         Write-Log -message "Starting Docker Compose. Note: This might take a while."
         try {
@@ -284,7 +306,8 @@ function Start-DockerCompose {
             Write-Log -message "Docker Compose failed to start." -type "ERROR"
         }
     } else {
-        Write-Log -message "Setup complete. You can start the application later with 'docker-compose up --build', or build it locally to run later with 'docker-compose build'."
+        Write-Log -message "Setup complete."
+        Write-Host "For future reference, your options are:You can rebuild and start the application later with 'docker-compose up --build', or just build it locally to start later with 'docker-compose build'."
     }
 }
 
@@ -296,15 +319,15 @@ $resumeFile = "$env:USERPROFILE\resume_script.flag"
 if (Test-Path -Path $resumeFile) {
     Remove-Item -Path $resumeFile -Force
     Write-Log -message "Resuming script after reboot."
-    Configure-WSL
+    Set-WSL
 } else {
-    Check-ExecutionPolicy
-    Check-Administrator
-    Check-WindowsVersion
-    Check-Docker
-    Check-DockerCompose
-    Configure-WSL
-    Configure-Docker
+    Test-ExecutionPolicy
+    Test-Administrator
+    Test-WindowsVersion
+    Test-Docker
+    Test-DockerCompose
+    Set-WSL
+    Set-Docker
     Start-DockerCompose
 }
 

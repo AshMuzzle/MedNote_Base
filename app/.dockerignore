@@ -9,6 +9,10 @@ venv/
 .env
 .DS_Store
 Thumbs.db
+logs
+temp
+uploads
+downloads
 
 # Configuration.
 app/source/logs/

@@ -13,17 +13,17 @@ services:
               capabilities: ["gpu"]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-      - OLLAMA_LOG_LEVEL="WARNING"
+      - GLOBAL_LOG_LEVEL="WARNING"
       - OLLAMA_ACCELERATE=1
       - OLLAMA_HOST=0.0.0.0
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      test: ["CMD", "test", "-f", "/app/source/models/model.env"]
       interval: 30s
       timeout: 10s
       retries: 30
     volumes:
       - ollama_data:/root/.ollama
-      - env_data:/ollama/.env
+      - shared_data:/app/source/models
 
   flask:
     build:
@@ -34,7 +34,7 @@ services:
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
     volumes:
-      - env_data:/app/.env
+      - shared_data:/app/source/models
     working_dir: /app
     depends_on:
       ollama:
@@ -42,4 +42,4 @@ services:
 
 volumes:
   ollama_data:
-  env_data:
+  shared_data:

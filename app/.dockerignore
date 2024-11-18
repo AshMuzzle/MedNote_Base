@@ -6,19 +6,9 @@ __pycache__/
 venv/
 
 # Environment.
-.env
+# .env
 .DS_Store
 Thumbs.db
-logs
-temp
-uploads
-downloads
-
-# Configuration.
-app/source/logs/
-*.log
-*.swp
-.hintrc
 
 # Project.
 .gitignore

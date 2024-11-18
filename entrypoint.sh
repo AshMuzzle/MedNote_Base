@@ -19,8 +19,11 @@ else
     SELECTED_MODEL="llama3.2:3b-instruct-fp16"
 fi
 
+# Verify model directory.
+# mkdir -p /app/source/models
+
 # Set LLM.
-echo "SELECTED_MODEL=$SELECTED_MODEL" > ../.env
+echo "SELECTED_MODEL=$SELECTED_MODEL" > /app/source/models/model.env
 
 # Start service.
 ollama serve &
@@ -30,8 +33,12 @@ OLLAMA_PID=$!
 wait_for_ollama
 
 # Get LLM.
-echo "Pulling model: $SELECTED_MODEL"
-ollama pull "$SELECTED_MODEL"
+if ollama list | grep -q "$SELECTED_MODEL"; then
+    echo "Model $SELECTED_MODEL already exists locally. Skipping pull."
+else
+    echo "Pulling model: $SELECTED_MODEL"
+    ollama pull "$SELECTED_MODEL"
+fi
 
 # Continue service.
 wait $OLLAMA_PID

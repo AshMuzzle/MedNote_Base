@@ -11,8 +11,8 @@ import tempfile
 import logging
 
 # Declare statics.
-load_dotenv(dotenv_path='/app/.env')
-PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'source', 'prompts', 'live.txt')
+load_dotenv(dotenv_path='/app/source/models/model.env')
+PROMPT_PATH = os.path.join(os.path.dirname(__file__), 'source', 'prompts', 'prompt.txt')
 FAVICON_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img', 'favicon')
 IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'static', 'img')
 LOG_PATH = os.path.join(os.path.dirname(__file__), 'source', 'logs')
@@ -76,6 +76,7 @@ os.makedirs(UPLOAD_PATH, exist_ok=True)
 def verify_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+# Read prompt file.
 def load_prompt():
     with open(PROMPT_PATH, 'r') as file:
         return file.read()
